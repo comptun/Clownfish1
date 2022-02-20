@@ -4,9 +4,10 @@
 
 namespace CFish
 {
-	Clownfish::Clownfish()
+	Clownfish::Clownfish() // contructor for initial chess settings
 	{
 		this->gameRunning = true;
+		this->currentTeam = Team::White;
 	}
 
 	void Clownfish::gameLoop()
@@ -18,8 +19,9 @@ namespace CFish
 			std::string move;
 			std::cin >> move;
 
-			if (board.isLegalMove(move, Team::White)) {
+			if (board.isLegalMove(move, currentTeam)) {
 				board.move(move);
+				currentTeam = board.oppositeTeam(currentTeam);
 			}
 			else {
 				std::cout << "Illegal Move\n";

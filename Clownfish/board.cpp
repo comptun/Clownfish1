@@ -479,13 +479,44 @@ namespace CFish
 		return Move(Vector2(startX, startY), Vector2(endX, endY));
 	}
 
-	bool Board::isLegalMove(Move move, Team team)
+	Vector2 Board::getKingPos(Team team)
 	{
-		Move actualMove = Move(Vector2(move.start.x, 8 - move.start.y), Vector2(move.end.x, 8 - move.end.y));
+		for (uint8_t i = 0; i < 64; ++i) {
+			if (position[i].getPiece() == PieceName::King && position[i].getTeam() == team) {
+				return indexToPos(i);
+			}
+		}
+	}
+
+	bool Board::isKingInCheck(Team team)
+	{
+		Vector2 kingPos = getKingPos(team);
+		MoveList possibleMoves = generatePseudoLegalMoves(oppositeTeam(team));
+		for (Move mov : possibleMoves) {
+			if (mov.end.x == kingPos.x && mov.end.y == kingPos.y) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool Board::isLegalMove(Move moveName, Team team)
+	{
+		Move actualMove = Move(Vector2(moveName.start.x, 8 - moveName.start.y), Vector2(moveName.end.x, 8 - moveName.end.y));
 		MoveList possibleMoves = generatePseudoLegalMoves(team);
 		for (Move mov : possibleMoves) {
-			if (mov == actualMove)
+			if (mov == actualMove) {
+				if (isKingInCheck(team)) {
+					move(mov);
+					if (isKingInCheck(team)) {
+						undo(mov);
+						return false;
+					}
+					undo(mov);
+					return true;
+				}
 				return true;
+			}
 		}
 		return false;
 	}

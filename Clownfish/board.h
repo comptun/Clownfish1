@@ -26,6 +26,8 @@ namespace CFish
 		Team oppositeTeam(Team team);
 		friend std::ostream& operator <<(std::ostream& output, Board data);
 		Move stringToMove(std::string move);
+		Vector2 getKingPos(Team team);
+		bool isKingInCheck(Team team);
 		void move(Move m);
 		void undo(Move m);
 		void move(std::string m);
@@ -36,7 +38,7 @@ namespace CFish
 		MoveList generateKingMoves(Vector2 startPos);
 		MoveList generatePawnMoves(Vector2 startPos);
 		MoveList generatePseudoLegalMoves(Team team);
-		bool isLegalMove(Move move, Team team);
+		bool isLegalMove(Move moveName, Team team);
 		bool isLegalMove(std::string move, Team team);
 		Board(std::string fen);
 		Board();
