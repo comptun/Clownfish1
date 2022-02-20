@@ -4,12 +4,32 @@
 
 namespace CFish
 {
-	Clownfish::Clownfish() {}
+	Clownfish::Clownfish()
+	{
+		this->gameRunning = true;
+	}
+
+	void Clownfish::gameLoop()
+	{
+		while (gameRunning) {
+
+			std::cout << board << "\n";
+			
+			std::string move;
+			std::cin >> move;
+
+			if (board.isLegalMove(move, Team::White)) {
+				board.move(move);
+			}
+			else {
+				std::cout << "Illegal Move\n";
+			}
+		}
+	}
 
 	int Clownfish::main()
 	{
-		Board board;
-		std::cout << board.generatePseudoLegalMoves(Team::White).size();
+		gameLoop();
 		return 1;
 	}
 }

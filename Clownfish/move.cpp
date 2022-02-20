@@ -15,6 +15,14 @@ namespace CFish
 		this->y = 0;
 	}
 
+	bool operator==(const Move& lhs, const Move& rhs)
+	{
+		return lhs.start.x == rhs.start.x &&
+			   lhs.start.y == rhs.start.y &&
+			   lhs.end.x == rhs.end.x &&
+			   lhs.end.y == rhs.end.y;
+	}
+
 	Move::Move(Vector2 start, Vector2 end)
 	{
 		this->start = start;

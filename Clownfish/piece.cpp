@@ -1,6 +1,7 @@
 #include "piece.h"
 namespace CFish
 {
+
 	Piece::Piece(PieceName name, Team team)
 	{
 		this->name = name;

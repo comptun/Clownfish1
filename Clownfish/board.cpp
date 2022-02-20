@@ -114,12 +114,169 @@ namespace CFish
 		capturedPieces.pop_back();
 	}
 
+	void Board::move(std::string m)
+	{
+		Move mov = stringToMove(m);
+		Move actualMove = Move(Vector2(mov.start.x, 8 - mov.start.y), Vector2(mov.end.x, 8 - mov.end.y));
+		move(actualMove);
+	}
+
+	void Board::undo(std::string m)
+	{
+		Move mov = stringToMove(m);
+		Move actualMove = Move(Vector2(mov.start.x, 8 - mov.start.y), Vector2(mov.end.x, 8 - mov.end.y));
+		undo(actualMove);
+	}
+
 	Vector2 Board::indexToPos(int index) 
 	{
 		return Vector2(index % 8, index / 8);
 	}
 
-	MoveList Board::generateSlidingPieceMoves(Vector2 startPos)
+	Team Board::oppositeTeam(Team team)
+	{
+		if (team == Team::White)
+			return Team::Black;
+		if (team == Team::Black)
+			return Team::White;
+	}
+
+	Board::MoveList Board::generateKnightMoves(Vector2 startPos)
+	{
+		MoveList moveList;
+		Team team = getBoard(startPos.x, startPos.y).getTeam();
+
+		if (startPos.x + 1 <= 7 && startPos.y - 2 >= 0)
+		{
+			if (getBoard(startPos.x + 1, startPos.y - 2).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y - 2)));
+			}
+		}
+		if (startPos.x + 2 <= 7 && startPos.y - 1 >= 0)
+		{
+			if (getBoard(startPos.x + 2, startPos.y - 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 2, startPos.y - 1)));
+			}
+		}
+
+		if (startPos.x - 1 >= 0 && startPos.y - 2 >= 0)
+		{
+			if (getBoard(startPos.x - 1, startPos.y - 2).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y - 2)));
+			}
+		}
+		if (startPos.x - 2 >= 0 && startPos.y - 1 >= 0)
+		{
+			if (getBoard(startPos.x - 2, startPos.y - 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 2, startPos.y - 1)));
+			}
+		}
+
+		if (startPos.x + 1 <= 7 && startPos.y + 2 <= 7)
+		{
+			if (getBoard(startPos.x + 1, startPos.y + 2).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y + 2)));
+			}
+		}
+		if (startPos.x + 2 <= 7 && startPos.y + 1 <= 7)
+		{
+			if (getBoard(startPos.x + 2, startPos.y + 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 2, startPos.y + 1)));
+			}
+		}
+		if (startPos.x - 1 >= 0 && startPos.y + 2 <= 7)
+		{
+			if (getBoard(startPos.x - 1, startPos.y + 2).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y + 2)));
+
+			}
+		}
+		if (startPos.x - 2 >= 0 && startPos.y + 1 <= 7)
+		{
+			if (getBoard(startPos.x - 2, startPos.y + 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 2, startPos.y + 1)));
+
+			}
+		}
+
+		return moveList;
+	}
+
+	Board::MoveList Board::generateKingMoves(Vector2 startPos)
+	{
+		MoveList moveList;
+		Team team = getBoard(startPos.x, startPos.y).getTeam();
+
+		if (startPos.y + 1 <= 7)
+		{
+			if (getBoard(startPos.x, startPos.y + 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + 1)));
+			}
+		}
+		if (startPos.y - 1 >= 0)
+		{
+			if (getBoard(startPos.x, startPos.y - 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y - 1)));
+			}
+		}
+		if (startPos.x + 1 <= 7)
+		{
+			if (getBoard(startPos.x + 1, startPos.y).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y)));
+			}
+		}
+		if (startPos.x - 1 >= 0)
+		{
+			if (getBoard(startPos.x - 1, startPos.y).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y)));
+			}
+		}
+
+		if (startPos.y + 1 <= 7 && startPos.x + 1 <= 7)
+		{
+			if (getBoard(startPos.x + 1, startPos.y + 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y + 1)));
+			}
+		}
+		if (startPos.x - 1 >= 0 && startPos.y - 1 >= 0)
+		{
+			if (getBoard(startPos.x - 1, startPos.y - 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y - 1)));
+			}
+		}
+		if (startPos.x + 1 <= 7 && startPos.y - 1 >= 0)
+		{
+			if (getBoard(startPos.x + 1, startPos.y - 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y - 1)));
+			}
+		}
+		if (startPos.x - 1 >= 0 && startPos.y + 1 <= 7)
+		{
+			if (getBoard(startPos.x - 1, startPos.y + 1).getTeam() != team)
+			{
+				moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y + 1)));
+			}
+		}
+
+		return moveList;
+	}
+
+	Board::MoveList Board::generateSlidingPieceMoves(Vector2 startPos)
 	{
 		MoveList moveList;
 		Team team = getBoard(startPos.x, startPos.y).getTeam();
@@ -127,38 +284,127 @@ namespace CFish
 		size_t index = startPos.y * 8 + startPos.x;
 		
 		if (name == PieceName::Queen || name == PieceName::Rook) {
-			for (int i = index - 8; i >= 0;) {
-				if (position[i].getTeam() == Team::None) {
-					moveList.push_back(Move(startPos, indexToPos(i)));
-					i -= 8;
-				}
-				else if (position[i].getTeam() == team) {
+			for (int i = index - 8; i >= 0; i -= 8) {
+				if (position[i].getTeam() == team) {
 					break;
 				}
-				else {
+				else if (position[i].getTeam() == oppositeTeam(team)) {
 					moveList.push_back(Move(startPos, indexToPos(i)));
+					break;
 				}
-				if (i == 0) break;
+				moveList.push_back(Move(startPos, indexToPos(i)));
 			}
-			for (int i = index + 8; i <= 63;) {
-				if (position[i].getTeam() == Team::None) {
-					moveList.push_back(Move(startPos, indexToPos(i)));
-					i += 8;
-				}
-				else if (position[i].getTeam() == team) {
+			for (int i = index + 8; i <= 63; i += 8) {
+				if (position[i].getTeam() == team) {
 					break;
 				}
-				else {
+				else if (position[i].getTeam() == oppositeTeam(team)) {
 					moveList.push_back(Move(startPos, indexToPos(i)));
+					break;
 				}
-				if (i == 63) break;
+				moveList.push_back(Move(startPos, indexToPos(i)));
+			}
+			for (int i = startPos.x + 1; i <= 7; ++i) {
+				if (getBoard(i, startPos.y).getTeam() == team) {
+					break;
+				}
+				else if (getBoard(i, startPos.y).getTeam() == oppositeTeam(team)) {
+					moveList.push_back(Move(startPos, Vector2(i, startPos.y)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(i, startPos.y)));
+			}
+			for (int i = startPos.x - 1; i >= 0; --i) {
+				if (getBoard(i, startPos.y).getTeam() == team) {
+					break;
+				}
+				else if (getBoard(i, startPos.y).getTeam() == oppositeTeam(team)) {
+					moveList.push_back(Move(startPos, Vector2(i, startPos.y)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(i, startPos.y)));
+			}
+		}
+
+		if (name == PieceName::Queen || name == PieceName::Bishop) {
+			for (int i = 1; startPos.x + i <= 7 && startPos.y - i >= 0; ++i)
+			{
+				if (getBoard(startPos.x + i, startPos.y - i).getTeam() == team)
+				{
+					break;
+				}
+				if ((startPos.x + i == 7 || startPos.y - i == 0) && getBoard(startPos.x + i, startPos.y - i).getPiece() == PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y - i)));
+					break;
+				}
+				if (getBoard(startPos.x + i, startPos.y - i).getPiece() != PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y - i)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y - i)));
+			}
+			for (int i = 1; startPos.x - i >= 0 && startPos.y - i >= 0; ++i)
+			{
+				if (getBoard(startPos.x - i, startPos.y - i).getTeam() == team)
+				{
+					break;
+				}
+				if ((startPos.x - i == 0 || startPos.y - i == 0) && getBoard(startPos.x - i, startPos.y - i).getPiece() == PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y - i)));
+					break;
+				}
+				if (getBoard(startPos.x - i, startPos.y - i).getPiece() != PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y - i)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y - i)));
+			}
+			for (int i = 1; startPos.x - i >= 0 && startPos.y + i <= 7; ++i)
+			{
+				if (getBoard(startPos.x - i, startPos.y + i).getTeam() == team)
+				{
+					break;
+				}
+				if ((startPos.x - i == 7 || startPos.y + i == 0) && getBoard(startPos.x - i, startPos.y + i).getPiece() == PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y + i)));
+					break;
+				}
+				if (getBoard(startPos.x - i, startPos.y + i).getPiece() != PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y + i)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(startPos.x - i, startPos.y + i)));
+			}
+			for (int i = 1; startPos.x + i <= 7 && startPos.y + i <= 7; ++i)
+			{
+				if (getBoard(startPos.x + i, startPos.y + i).getTeam() == team)
+				{
+					break;
+				}
+				if ((startPos.x + i == 7 || startPos.y + i == 7) && getBoard(startPos.x + i, startPos.y + i).getPiece() == PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y + i)));
+					break;
+				}
+				if (getBoard(startPos.x + i, startPos.y + i).getPiece() != PieceName::None)
+				{
+					moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y + i)));
+					break;
+				}
+				moveList.push_back(Move(startPos, Vector2(startPos.x + i, startPos.y + i)));
 			}
 		}
 
 		return moveList;
 	}
 
-	MoveList Board::generatePawnMoves(Vector2 startPos)
+	Board::MoveList Board::generatePawnMoves(Vector2 startPos)
 	{
 		MoveList moveList;
 		Team team = getBoard(startPos.x, startPos.y).getTeam();
@@ -167,18 +413,34 @@ namespace CFish
 			int offset = 1;
 			if (team == Team::White)
 				offset = -1;
-			if (getBoard(startPos.x, startPos.y + offset).getPiece() == PieceName::None) {
-				moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + offset)));
-				if (getBoard(startPos.x, startPos.y + (2 * offset)).getPiece() == PieceName::None) {
-					moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + (2 * offset))));
-
+			if ((team == Team::White && startPos.y > 0) || (team == Team::Black && startPos.y < 7)) {
+				if (getBoard(startPos.x, startPos.y + offset).getPiece() == PieceName::None) {
+					moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + offset)));
+					if (getBoard(startPos.x, startPos.y + (2 * offset)).getPiece() == PieceName::None) {
+						if (team == Team::White && startPos.y == 6 && startPos.y > 1) {
+							moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + (2 * offset))));
+						}
+						else if (team == Team::Black && startPos.y == 1 && startPos.y < 6) {
+							moveList.push_back(Move(startPos, Vector2(startPos.x, startPos.y + (2 * offset))));
+						}
+					}
+				}
+				if (startPos.x > 0) {
+					if (getBoard(startPos.x - 1, startPos.y + offset).getTeam() == oppositeTeam(team)) {
+						moveList.push_back(Move(startPos, Vector2(startPos.x - 1, startPos.y + offset)));
+					}
+				}
+				if (startPos.x < 7) {
+					if (getBoard(startPos.x + 1, startPos.y + offset).getTeam() == oppositeTeam(team)) {
+						moveList.push_back(Move(startPos, Vector2(startPos.x + 1, startPos.y + offset)));
+					}
 				}
 			}
 		}
 		return moveList;
 	}
 
-	MoveList Board::generatePseudoLegalMoves(Team team)
+	Board::MoveList Board::generatePseudoLegalMoves(Team team)
 	{
 		MoveList moveList;
 		for (uint8_t i = 0; i < 64; ++i) {
@@ -195,8 +457,41 @@ namespace CFish
 					MoveList newMoveList = generateSlidingPieceMoves(pos);
 					moveList.insert(moveList.end(), newMoveList.begin(), newMoveList.end());
 				}
+				else if (name == PieceName::Knight) {
+					MoveList newMoveList = generateKnightMoves(pos);
+					moveList.insert(moveList.end(), newMoveList.begin(), newMoveList.end());
+				}
+				else if (name == PieceName::King) {
+					MoveList newMoveList = generateKingMoves(pos);
+					moveList.insert(moveList.end(), newMoveList.begin(), newMoveList.end());
+				}
 			}
 		}
 		return moveList;
+	}
+
+	Move Board::stringToMove(std::string move)
+	{
+		uint8_t startX = move.at(0) - 97;
+		uint8_t startY = move.at(1) - '0';
+		uint8_t endX = move.at(2) - 97;
+		uint8_t endY = move.at(3) - '0';
+		return Move(Vector2(startX, startY), Vector2(endX, endY));
+	}
+
+	bool Board::isLegalMove(Move move, Team team)
+	{
+		Move actualMove = Move(Vector2(move.start.x, 8 - move.start.y), Vector2(move.end.x, 8 - move.end.y));
+		MoveList possibleMoves = generatePseudoLegalMoves(team);
+		for (Move mov : possibleMoves) {
+			if (mov == actualMove)
+				return true;
+		}
+		return false;
+	}
+
+	bool Board::isLegalMove(std::string move, Team team)
+	{
+		return isLegalMove(stringToMove(move), team);
 	}
 }

@@ -10,7 +10,9 @@ namespace CFish
 	{
 	private:
 		Board board;
+		bool gameRunning;
 	public:
+		void gameLoop();
 		int main();
 		Clownfish();
 	};

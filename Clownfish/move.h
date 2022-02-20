@@ -17,6 +17,7 @@ namespace CFish
 	public:
 		Vector2 start;
 		Vector2 end;
+		friend bool operator==(const Move& lhs, const Move& rhs);
 		Move(Vector2 start, Vector2 end);
 		Move();
 	};
