@@ -1,8 +1,7 @@
-#include "board.h"
-#include <iostream>
+#include "clownfish.h"
 
 int main() 
 {
-	Clownfish::Board board;
-	board.print();
+	CFish::Clownfish clownfish;
+	clownfish.main();
 }

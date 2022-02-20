@@ -1,5 +1,5 @@
 #include "piece.h"
-namespace Clownfish
+namespace CFish
 {
 	Piece::Piece(PieceName name, Team team)
 	{

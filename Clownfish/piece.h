@@ -1,8 +1,9 @@
 #ifndef PIECE_H
 #define	PIECE_H
-namespace Clownfish
+#include <iostream>
+namespace CFish
 {
-	enum class PieceName
+	enum class PieceName : uint8_t
 	{
 		Pawn = 0,
 		Knight,
@@ -13,7 +14,7 @@ namespace Clownfish
 		None
 	};
 
-	enum class Team
+	enum class Team : uint8_t
 	{
 		White = 0,
 		Black,

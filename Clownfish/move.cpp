@@ -1,8 +1,9 @@
 #include "move.h"
 
-namespace Clownfish
+namespace CFish
 {
-	Vector2::Vector2(int x, int y)
+
+	Vector2::Vector2(uint8_t x, uint8_t y)
 	{
 		this->x = x;
 		this->y = y;

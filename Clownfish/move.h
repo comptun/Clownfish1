@@ -1,13 +1,14 @@
 #ifndef MOVE_H
 #define MOVE_H
-namespace Clownfish 
+#include <iostream>
+namespace CFish
 {
 	class Vector2
 	{
 	public:
-		int x;
-		int y;
-		Vector2(int x, int y);
+		uint8_t x;
+		uint8_t y;
+		Vector2(uint8_t x, uint8_t y);
 		Vector2();
 	};
 
